@@ -1,0 +1,89 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: sensor-storage
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: production
+  region: eu-north-1
+  memorySize: 128
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:BatchWriteItem
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  status:
+    handler: handler.status
+    events:
+      - http:
+          method: GET
+          path: /status
+          cors: true
+  # all:
+  #   handler: handler.all
+  #   events:
+  #     - http:
+  #         method: GET
+  #         path: /all
+  #         cors: true
+  add:
+    handler: handler.add
+    timeout: 25
+    events:
+      - http:
+          method: POST
+          path: /add
+          cors: true
+  addOne:
+    handler: handler.addOne
+    timeout: 25
+    events:
+      - http:
+          method: POST
+          path: /addOne
+          cors: true
+#  toGoogleSheet:
+#    runtime: python2.7
+#    handler: to_google_sheet.main
+#    events:
+#      - stream: arn:aws:dynamodb:eu-central-1:413820158215:table/sensor-storage-dev/stream/2018-10-01T18:45:53.441
+
+resources:
+  Resources:
+    SensorDynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: sensorId
+            AttributeType: S
+          - AttributeName: ts
+            AttributeType: S
+        KeySchema:
+          - AttributeName: sensorId
+            KeyType: HASH
+          - AttributeName: ts
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
