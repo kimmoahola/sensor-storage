@@ -3,21 +3,27 @@
 const AWS = require('aws-sdk');
 
 module.exports.status = async (event, context, callback) => {
-  const dynamoDb = new AWS.DynamoDB.DocumentClient();
+  const sensorId = event.queryStringParameters && event.queryStringParameters['sensorId'];
+  let result = undefined;
 
-  const params = {
-    TableName: process.env.DYNAMODB_TABLE,
-    ProjectionExpression: 'ts',
-    ScanIndexForward: false,
-    Limit: 1,
-    KeyConditionExpression: "sensorId = :s",
-    ExpressionAttributeValues: {
-        ":s": 'olohuone',
-    }
-  };
+  if (sensorId) {
+    const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-  const result = await dynamoDb.query(params).promise();
-  console.log('items', result.Items);
+    const params = {
+      TableName: process.env.DYNAMODB_TABLE,
+      ProjectionExpression: 'ts',
+      ScanIndexForward: false,
+      Limit: 1,
+      KeyConditionExpression: "sensorId = :s",
+      ExpressionAttributeValues: {
+          ":s": sensorId,
+      }
+    };
+
+    result = await dynamoDb.query(params).promise();
+  }
+
+  console.log('items', result ? result.Items : null);
   const response = {
     statusCode: 200,
     headers: {
@@ -25,7 +31,7 @@ module.exports.status = async (event, context, callback) => {
       'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
-      latestItem: result.Items[0] ? result.Items[0].ts : null,
+      latestItem: result && result.Items[0] ? result.Items[0].ts : null,
       config: {
         maxAddBatchSize: 500,
       },
