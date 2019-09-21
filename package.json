@@ -1,0 +1,23 @@
+{
+  "name": "sensor-storage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimmoahola/sensor-storage.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kimmoahola/sensor-storage/issues"
+  },
+  "homepage": "https://github.com/kimmoahola/sensor-storage#readme",
+  "devDependencies": {
+    "serverless": "^1.52.2",
+    "serverless-stack-termination-protection": "^1.0.0"
+  }
+}
