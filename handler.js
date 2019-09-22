@@ -11,7 +11,7 @@ module.exports.status = async (event, context, callback) => {
 
     const params = {
       TableName: process.env.DYNAMODB_TABLE,
-      ProjectionExpression: 'ts',
+      ProjectionExpression: 'ts, temperature',
       ScanIndexForward: false,
       Limit: 1,
       KeyConditionExpression: "sensorId = :s",
@@ -23,7 +23,8 @@ module.exports.status = async (event, context, callback) => {
     result = await dynamoDb.query(params).promise();
   }
 
-  console.log('items', result ? result.Items : null);
+  console.log(`items for ${sensorId}`, result ? result.Items : null);
+  const latestItem = result && result.Items[0] ? { ts: result.Items[0].ts, temperature: result.Items[0].temperature } : null;
   const response = {
     statusCode: 200,
     headers: {
@@ -31,7 +32,7 @@ module.exports.status = async (event, context, callback) => {
       'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
-      latestItem: result && result.Items[0] ? result.Items[0].ts : null,
+      latestItem: latestItem,
       config: {
         maxAddBatchSize: 500,
       },
