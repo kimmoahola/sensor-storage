@@ -35,7 +35,7 @@ module.exports.status = async (event, context, callback) => {
     body: JSON.stringify({
       latestItem: latestItem,
       config: {
-        maxAddBatchSize: 500
+        maxAddBatchSize: 2000
       }
     })
   };
