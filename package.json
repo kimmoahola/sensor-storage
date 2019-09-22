@@ -19,5 +19,8 @@
   "devDependencies": {
     "serverless": "^1.52.2",
     "serverless-stack-termination-protection": "^1.0.0"
+  },
+  "dependencies": {
+    "serverless-dynamodb-autoscaling": "^0.6.2"
   }
 }

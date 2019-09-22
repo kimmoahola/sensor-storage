@@ -88,5 +88,18 @@ resources:
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
 
+custom:
+  capacities:
+    - table: SensorDynamoDbTable
+      read:
+        minimum: 1
+        maximum: 25
+        usage: 0.9
+      write:
+        minimum: 1
+        maximum: 25
+        usage: 0.9
+
 plugins:
   - serverless-stack-termination-protection
+  - serverless-dynamodb-autoscaling
