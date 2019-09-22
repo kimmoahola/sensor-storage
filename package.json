@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kimmoahola/sensor-storage#readme",
   "devDependencies": {
+    "prettier": "1.18.2",
     "serverless": "^1.52.2",
     "serverless-stack-termination-protection": "^1.0.0"
   },
