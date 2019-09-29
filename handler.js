@@ -130,9 +130,7 @@ module.exports.addOne = async (event, context, callback) => {
 
   const params = {
     Item: {
-      sensorId: { S: dataIn.sensorId },
-      ts: { S: dataIn.ts },
-      temperature: { S: dataIn.temperature }
+      ...dataIn
     },
     TableName: process.env.DYNAMODB_TABLE
   };
