@@ -12,7 +12,6 @@ module.exports.status = async (event, context, callback) => {
 
     const params = {
       TableName: process.env.DYNAMODB_TABLE,
-      ProjectionExpression: "ts, temperature",
       ScanIndexForward: false,
       Limit: 1,
       KeyConditionExpression: "sensorId = :s",
@@ -35,7 +34,7 @@ module.exports.status = async (event, context, callback) => {
     body: JSON.stringify({
       latestItem: latestItem,
       config: {
-        maxAddBatchSize: 2000
+        maxAddBatchSize: 1500
       }
     })
   };
