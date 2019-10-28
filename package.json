@@ -4,7 +4,9 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy-prod": "serverless deploy",
+    "deploy-dev": "serverless deploy --stage dev"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,6 @@
   "devDependencies": {
     "prettier": "1.18.2",
     "serverless": "^1.52.2",
-    "serverless-stack-termination-protection": "^1.0.0",
-    "serverless-dynamodb-autoscaling": "^0.6.2"
+    "serverless-stack-termination-protection": "^1.0.0"
   }
 }
